@@ -6,3 +6,4 @@ misc/
 cmd/cmd
 *.swp
 _*
+*~
