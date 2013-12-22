@@ -7,3 +7,5 @@ cmd/cmd
 *.swp
 _*
 *~
+/index/bwt/bwt.test
+/index/bwt/data/Homo_sapiens.GRCh37.74.dna.chromosome.1.fa
