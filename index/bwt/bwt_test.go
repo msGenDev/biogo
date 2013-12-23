@@ -11,26 +11,6 @@ func demoSequence(sequence string) *linear.Seq {
 	return linear.NewSeq("example DNA", []alphabet.Letter(sequence), alphabet.DNA)
 }
 
-func TestSuffixArray(t *testing.T) {
-	testSeq := "TAGCTACTGATGCGTAGCTATGCTAGC"
-	d := demoSequence(testSeq)
-
-	Convey("Given a new index", t, func() {
-		index := New(d)
-		Convey("The BWT and suffix arrays should have the same length as the original sequence", func() {
-			So(len(index.BWT), ShouldEqual, len(testSeq))
-			So(len(index.sa), ShouldEqual, len(testSeq))
-		})
-
-		Convey("The suffix array should be calculated correctly", func() {
-			expected := []int{5, 24, 1, 15, 9, 19, 26, 12, 3, 22, 17, 6, 8, 25, 11, 2, 21, 16, 13, 4, 23, 0, 14, 18, 7, 10, 20}
-			for i := range expected {
-				So(index.sa[i], ShouldEqual, expected[i])
-			}
-		})
-	})
-}
-
 func TestIndexSearch(t *testing.T) {
 	testSeq := "TAGCTACTGATGCGTAGCTATGCTAGC"
 	d := demoSequence(testSeq)
@@ -49,6 +29,13 @@ func TestIndexSearch(t *testing.T) {
 			})
 		})
 
+		Convey("When searching for a pattern that wraps around the string", func() {
+			results := index.SearchForBytesBasic([]byte("AGCTAGCTACT"))
+			Convey("There should be no results returned", func() {
+				So(len(results), ShouldBeZeroValue)
+			})
+		})
+
 		Convey("When searching for 'GTAG'", func() {
 			results := index.SearchForBytesBasic([]byte("TAGC"))
 			Convey("There should be at least one hit", func() {
@@ -63,7 +50,7 @@ func TestIndexSearch(t *testing.T) {
 		Convey("When searching for nonsense", func() {
 			results := index.SearchForBytesBasic([]byte("foobar"))
 			Convey("There should be no results", func() {
-				So(len(results), ShouldEqual, 0)
+				So(len(results), ShouldBeZeroValue)
 			})
 		})
 	})
