@@ -14,11 +14,10 @@ type Index struct {
 }
 
 type IndexFaster struct {
-	alphabet alphabet.Alphabet
-	BWT      []byte
-	sa       []int
-	c        [256]uint
-	wtree    *wavelettree.WaveletTree
+	BWT   []byte
+	sa    []int
+	c     [256]uint
+	wtree *wavelettree.WaveletTree
 }
 
 func New(seq *linear.Seq) *Index {
@@ -54,8 +53,7 @@ func NewWithWaveletTree(seq *linear.Seq) *IndexFaster {
 	suffixArray := generateSuffixArray(seq.Seq)
 
 	index := IndexFaster{
-		sa:       suffixArray,
-		alphabet: seq.Alphabet(),
+		sa: suffixArray,
 	}
 
 	index.BWT = make([]byte, length)
@@ -75,7 +73,6 @@ func NewWithWaveletTree(seq *linear.Seq) *IndexFaster {
 	}
 
 	index.wtree = wavelettree.New(index.BWT)
-
 	return &index
 }
 
